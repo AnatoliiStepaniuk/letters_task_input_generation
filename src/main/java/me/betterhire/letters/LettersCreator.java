@@ -16,9 +16,14 @@ import static me.betterhire.letters.FileUtils.lettersFile;
 public class LettersCreator {
 
 	@SneakyThrows
-	public void createLetters(String wordsFile, double rate) {
-		List<String> input = Files.readAllLines(Paths.get(wordsFile));
-		List<String> allLetters = input.subList(1, input.size())
+	public void createLettersFromFile(String wordsFile, double rate) {
+		List<String> words = Files.readAllLines(Paths.get(wordsFile));
+		createLetters(lettersFile(wordsFile), words, rate);
+	}
+
+	@SneakyThrows
+	public void createLetters(String lettersFile, List<String> words, double rate) {
+		List<String> allLetters = words.subList(1, words.size())
 				.stream()
 				.flatMap( s -> Arrays.stream(s.split( "" ) ) )
 				.collect( Collectors.toList() );
@@ -27,14 +32,14 @@ public class LettersCreator {
 
 		List<String> someLetters = allLetters.subList(0, (int) (allLetters.size() * rate));
 
-		writeToFile(lettersFile(wordsFile), someLetters);
+		writeToFile(lettersFile, someLetters);
 	}
 
 	@SneakyThrows
 	private void writeToFile(String lettersFile, List<String> someLetters){
 		BufferedWriter lettersWriter = new BufferedWriter(new FileWriter(lettersFile));
-		lettersWriter.write(String.valueOf(someLetters.size()));
-		lettersWriter.newLine();
+//		lettersWriter.write(String.valueOf(someLetters.size()));
+//		lettersWriter.newLine();
 		FileUtils.writeStrings(lettersWriter, someLetters);
 	}
 
